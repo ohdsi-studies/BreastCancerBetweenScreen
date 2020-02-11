@@ -10,7 +10,7 @@ Predicting breast cancer within 3 years of a negative mammography
 - Study lead forums tag: **[MauraBeaton](https://forums.ohdsi.org/u/maurabeaton), [Jill_Hardin](https://forums.ohdsi.org/u/jill_hardin) , [krfeeney](https://forums.ohdsi.org/u/krfeeney), [aostropolets](https://forums.ohdsi.org/u/aostropolets),  [jreps](https://forums.ohdsi.org/u/jreps) , [ericaVoss](https://forums.ohdsi.org/u/ericavoss) **
 - Study start date: **Aug 9, 2019**
 - Study end date: **Sep 16, 2019**
-- Protocol: **[Protocol](https://github.com/ohdsi-studies/BreastCancerBetweenScreen/blob/master/documents/ProtocolWoo2019.docx)**
+- Protocol: **[Protocol](https://github.com/ohdsi-studies/BreastCancerBetweenScreen/blob/master/documents/protocolWoo2019.docx)**
 - Publications: **-**
 - Results explorer: **[Shiny App](https://data.ohdsi.org/WoO2019/)**
 
