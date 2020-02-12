@@ -16,6 +16,27 @@ Predicting breast cancer within 3 years of a negative mammography
 
 This study aims to explore whether we can use observational health data to predict which women will develop breat cancer between mammography screenings.
 
+Model Summary
+===============
+- Target Name: **Screen - Mammography**
+- Target Size: **3649198**
+- Outcome Name: **Cancer - Breast**
+- Outcome Count: **15399 (0.4%)**
+- Time-at-risk: **3-years**
+- Database: **CCAE (US cLaims)**
+- Model Type: **Lasso Logistic Regression**
+- Covariates: **Age Group, Gender, Condition/Drug groups**
+- AUROC: **0.62**
+- AUPRC: **0.007**
+- PPV @ 1% sensitivity: **-**
+- PPV @ 10% sensitivity: **1**
+- PPV @ 50% sensitivity: **0.6**
+- Calibration Gradient: **1.00**
+- Calibration Intercept: **0.00**
+- Atlas T link: **[T Criteria](http://atlas-demo.ohdsi.org/#/cohortdefinition/1771366)**
+- Atlas O link: **[O Criteria](http://atlas-demo.ohdsi.org/#/cohortdefinition/1771367)**
+- Vocabulary: **-**
+
 The Women of OHDSI Overview
 ========================================================
 
