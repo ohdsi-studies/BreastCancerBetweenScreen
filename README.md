@@ -62,65 +62,69 @@ Study Milestones
 
 ## Code to Install
 
-To install this package run :
+To install Strategus run :
 
 ```r
   # install the network package
-  # install.packages('devtools')
-  devtools::install_github("OHDSI/OhdsiSharing")
-  devtools::install_github("OHDSI/FeatureExtraction")
-  devtools::install_github("OHDSI/PatientLevelPrediction")
-  devtools::install_github("ohdsi-studies/BreastCancerBetweenScreen")
+  # install.packages('remotes')
+  remotes::install_github("OHDSI/Strategus")
 ```
 
-Instructions To Run Package
+Instructions To Run Strategus for this Study:
 ===================
 
 ```r
-  library(BreastCancerBetweenScreen)
-  # USER INPUTS
-#=======================
-# The folder where the study intermediate and result files will be written:
-outputFolder <- "./BreastCancerBetweenScreenResults"
+  library(Strategus)
 
-# Specify where the temporary files (used by the ff package) will be created:
-options(fftempdir = "location with space to save big data")
+##=========== START OF INPUTS ==========
+# Add your json file location, connection to OMOP CDM data settings and 
 
-# Details for connecting to the server:
-dbms <- "you dbms"
-user <- 'your username'
-pw <- 'your password'
-server <- 'your server'
-port <- 'your port'
+# load the json spec
+url <- "https://raw.githubusercontent.com/ohdsi-studies/BreastCancerBetweenScreen/master/inst/strategusStudy.json"
+json <- readLines(file(url))
+json2 <- paste(json, collaplse = '\n')
+analysisSpecifications <- ParallelLogger::convertJsonToSettings(json2)
 
-connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
-                                                                server = server,
-                                                                user = user,
-                                                                password = pw,
-                                                                port = port)
+connectionDetailsReference <- "<database ref>"
 
-# Add the database containing the OMOP CDM data
-cdmDatabaseSchema <- 'cdm database schema'
-# Add a database with read/write access as this is where the cohorts will be generated
-cohortDatabaseSchema <- 'work database schema'
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = '<dbms>',
+  server ='<server>',
+  user = '<user>',
+  password = '<password>',
+  port = '<port>'
+)
 
-oracleTempSchema <- NULL
+workDatabaseSchema <- '<your workDatabaseSchema>'
+cdmDatabaseSchema <- '<your cdmDatabaseSchema>'
 
-# table name where the cohorts will be generated
-cohortTable <- 'finalWooCohort'
-#=======================
+outputLocation <- '<folder location to run study and output results?'
+minCellCount <- 5
+cohortTableName <- "strategus_example"
 
-execute(connectionDetails = connectionDetails,
-        cdmDatabaseSchema = cdmDatabaseSchema,
-        cohortDatabaseSchema = cohortDatabaseSchema,
-        cohortTable = cohortTable,
-        oracleTempSchema = oracleTempSchema,
-        outputFolder = outputFolder,
-        createProtocol = F,
-        createCohorts = T,
-        runAnalyses = T,
-        createResultsDoc = F,
-        packageResults = T,
-        createValidationPackage = F,
-        minCellCount= 5)
+##=========== END OF INPUTS ==========
+
+storeConnectionDetails(
+  connectionDetails = connectionDetails,
+  connectionDetailsReference = connectionDetailsReference
+  )
+
+executionSettings <- createCdmExecutionSettings(
+  connectionDetailsReference = connectionDetailsReference,
+  workDatabaseSchema = workDatabaseSchema,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = cohortTableName),
+  workFolder = file.path(outputLocation, "strategusWork"),
+  resultsFolder = file.path(outputLocation, "strategusOutput"),
+  minCellCount = minCellCount
+)
+
+# Note: this environmental variable should be set once for each compute node
+Sys.setenv("INSTANTIATED_MODULES_FOLDER" = file.path(outputLocation, "StrategusInstantiatedModules"))
+
+execute(
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = executionSettings,
+  executionScriptFolder = file.path(outputLocation, "strategusExecution")
+  )
 ```
